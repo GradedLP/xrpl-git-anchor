@@ -1,0 +1,13 @@
+# /etc/systemd/system/xrpl-git-anchor-alert.service -- optional OnFailure push via ntfy.
+# Set ANCHOR_NTFY_TOPIC in /etc/xrpl-git-anchor.env to a private, hard-to-guess topic name (anyone who knows it can read the alerts).
+[Unit]
+Description=xrpl-git-anchor FAILED alert
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/xrpl-git-anchor.env
+# "$$" passes a literal "$" through systemd, so the shell (not systemd) expands these.
+ExecStart=/bin/sh -c 'test -n "$$ANCHOR_NTFY_TOPIC" && curl -fsS \
+  -H "Title: [$$(hostname)] xrpl-git-anchor FAILED" -H "Priority: urgent" -H "Tags: rotating_light" \
+  -d "xrpl-git-anchor failed at $$(date -u -Iseconds). Check: journalctl -u xrpl-git-anchor -n 40 --no-pager" \
+  "$${ANCHOR_NTFY_BASE:-https://ntfy.sh}/$$ANCHOR_NTFY_TOPIC"'

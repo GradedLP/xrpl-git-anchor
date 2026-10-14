@@ -1,0 +1,47 @@
+# /etc/systemd/system/xrpl-git-anchor.service  -- example unit; adjust User, paths and node location.
+[Unit]
+Description=xrpl-git-anchor: one XRPL memo tx per repository change (+ heartbeat)
+Wants=network-online.target
+After=network-online.target
+# Optional: page yourself when a run fails (see xrpl-git-anchor-alert.service).
+OnFailure=xrpl-git-anchor-alert.service
+
+[Service]
+Type=oneshot
+User=xrpl-git-anchor
+Group=xrpl-git-anchor
+WorkingDirectory=/opt/xrpl-git-anchor
+EnvironmentFile=/etc/xrpl-git-anchor.env
+Environment=HOME=/var/lib/xrpl-git-anchor
+Environment=NODE_ENV=production
+# The seed file is root:root 0400. systemd copies it into a private, in-memory credentials dir for
+# the length of one run; the service user cannot read /etc/xrpl-git-anchor/seed itself.
+LoadCredential=seed:/etc/xrpl-git-anchor/seed
+# Sets STATE_DIRECTORY=/var/lib/xrpl-git-anchor (mirror, state.json, proofs.jsonl).
+StateDirectory=xrpl-git-anchor
+StateDirectoryMode=0700
+ExecStart=/usr/bin/node /opt/xrpl-git-anchor/bin/anchor.js
+TimeoutStartSec=900
+MemoryMax=512M
+UMask=0022
+# --- hardening: writes only its state dir and (optionally) the public proofs folder ---
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=-/var/www/anchors
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=

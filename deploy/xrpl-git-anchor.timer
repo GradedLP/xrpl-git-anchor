@@ -1,0 +1,11 @@
+# /etc/systemd/system/xrpl-git-anchor.timer -- a run every 30 minutes. A run only sends a transaction
+# when the branch moved, or when the last anchor is older than ANCHOR_HEARTBEAT_HOURS.
+[Unit]
+Description=xrpl-git-anchor every 30 minutes
+
+[Timer]
+OnCalendar=*-*-* *:07,37:00 UTC
+Persistent=false
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,26 @@
+{
+  "name": "xrpl-git-anchor",
+  "version": "0.1.0",
+  "description": "Anchor any git repository to the XRP Ledger, and verify it independently: one memo transaction per change, carrying a SHA-256 commitment to every file.",
+  "license": "MIT",
+  "author": "Nathen Wright (GradedLP)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GradedLP/xrpl-git-anchor.git"
+  },
+  "keywords": ["xrpl", "xrp-ledger", "git", "timestamp", "anchoring", "proof-of-existence", "pre-registration"],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "bin": {
+    "xrpl-git-anchor": "bin/anchor.js"
+  },
+  "scripts": {
+    "test": "node --test --test-reporter=spec --test-concurrency=1 tests/*.test.js",
+    "e2e:testnet": "node scripts/e2e-testnet.js",
+    "e2e:admin": "node scripts/e2e-admin-testnet.js"
+  },
+  "dependencies": {
+    "xrpl": "4.6.0"
+  }
+}
