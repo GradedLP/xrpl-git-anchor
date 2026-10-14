@@ -1,5 +1,7 @@
 # xrpl-git-anchor
 
+[![test](https://github.com/GradedLP/xrpl-git-anchor/actions/workflows/test.yml/badge.svg)](https://github.com/GradedLP/xrpl-git-anchor/actions/workflows/test.yml)
+
 Anchor any git repository to the XRP Ledger, and verify it independently.
 
 A git commit date is whatever its author typed. An XRP Ledger close time isn't. `xrpl-git-anchor` watches
@@ -22,6 +24,17 @@ changes; that is over 230 anchors so far at about 12 drops each. You can check a
         --memo-type gradedlp/anchor/v1
     python3 verify/verify_anchor.py --repo publiciq --account rPUig22h1mAiCsiRT2C9TGpqotHGCS8Y3K \
         --memo-type gradedlp/anchor/v1 --file ANCHORS.md      # earliest ledger proving this exact file
+
+**This repository anchors itself.** Since 2026-10-14, every change to `main` here has been anchored from its own
+account, `rasbTqdGcwdHURWQUaEzRCLBVsWnRKHVUs`. It uses the default memo type `xrpl-git-anchor/v1` and runs the
+`v0.1.0` release of this code. That account is declared here, in this README. Check it:
+
+    git clone https://github.com/GradedLP/xrpl-git-anchor.git && cd xrpl-git-anchor
+    python3 verify/verify_anchor.py --repo . --account rasbTqdGcwdHURWQUaEzRCLBVsWnRKHVUs \
+        --expect-repo https://github.com/GradedLP/xrpl-git-anchor
+
+A change to this README lands in the next run, normally within 30 minutes, so the newest commit may not be
+anchored yet.
 
 ## What it is for
 
